@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little Monster Diary</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(to right, #ffb6c1, #dda0dd, #add8e6, #ffffff);
+            text-align: center;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            width: 50%;
+            margin: auto;
+            position: relative;
+        }
+        .sticker {
+            width: 60px;
+            position: absolute;
+        }
+        .sticker1 { top: -30px; left: -30px; }
+        .sticker2 { bottom: -30px; right: -30px; }
+        input, textarea {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #ff66b2;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #ff66b2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">Little Monster Diary</h1>
+        <img src="https://i.imgur.com/OQ6LO1G.png" class="sticker sticker1">
+        <img src="https://i.imgur.com/1j1P4Oj.png" class="sticker sticker2">
+        
+        <h3>Register</h3>
+        <input type="text" id="newUsername" placeholder="Choose a username">
+        <input type="password" id="newPassword" placeholder="Choose a password">
+        <button onclick="register()">Register</button>
+        <p id="registerStatus"></p>
+        
+        <h3>Login</h3>
+        <input type="text" id="username" placeholder="Enter your username">
+        <input type="password" id="password" placeholder="Enter your password">
+        <button onclick="login()">Login</button>
+        <p id="loginStatus"></p>
+        
+        <div id="diarySection" style="display: none;">
+            <textarea id="diaryEntry" placeholder="Write your thoughts here..."></textarea>
+            <br><br>
+            <button onclick="saveDiary()">Save</button>
+            <p id="status"></p>
+        </div>
+    </div>
+    
+    <script>
+        function register() {
+            let newUser = document.getElementById("newUsername").value;
+            let newPass = document.getElementById("newPassword").value;
+            if (newUser && newPass) {
+                localStorage.setItem("user_" + newUser, newPass);
+                document.getElementById("registerStatus").innerText = "Registration Successful! Now Login.";
+            } else {
+                document.getElementById("registerStatus").innerText = "Please enter username and password.";
+            }
+        }
+        
+        function login() {
+            let user = document.getElementById("username").value;
+            let pass = document.getElementById("password").value;
+            let storedPass = localStorage.getItem("user_" + user);
+            
+            if (storedPass && storedPass === pass) {
+                document.getElementById("loginStatus").innerText = "Login Successful!";
+                document.getElementById("diarySection").style.display = "block";
+                loadDiary(user);
+            } else {
+                document.getElementById("loginStatus").innerText = "Invalid username or password!";
+            }
+        }
+        
+        function saveDiary() {
+            let user = document.getElementById("username").value;
+            let text = document.getElementById("diaryEntry").value;
+            localStorage.setItem("diary_" + user, text);
+            document.getElementById("status").innerText = "Saved Successfully!";
+        }
+        
+        function loadDiary(user) {
+            document.getElementById("diaryEntry").value = localStorage.getItem("diary_" + user) || "";
+        }
+    </script>
+</body>
+</html>
